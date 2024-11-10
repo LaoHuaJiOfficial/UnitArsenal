@@ -1,7 +1,7 @@
 package arsenal.content.weapon;
 
-import arsenal.GlobalVar;
-import arsenal.utils.UnitGrid;
+import arsenal.ArsenalVar;
+import arsenal.utils.GridUtil;
 import arc.Core;
 import arc.graphics.g2d.TextureRegion;
 import arc.util.Nullable;
@@ -58,7 +58,7 @@ public class WeaponData{
         }else if (Core.atlas.isFound(weapon.region)){
             return weapon.region;
         }else {
-            return GlobalVar.weaponNoSprite;
+            return ArsenalVar.weaponNoSprite;
 
         }
     }
@@ -67,7 +67,7 @@ public class WeaponData{
         var wep = this.weapon.copy();
         wep.x = x;
         wep.y = y;
-        UnitGrid.AddUnitWeapons(unit, new WeaponMount(wep));
+        GridUtil.AddUnitWeapons(unit, new WeaponMount(wep));
     }
 
     public enum WeaponCategory{

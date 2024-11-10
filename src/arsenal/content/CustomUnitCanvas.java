@@ -1,6 +1,6 @@
 package arsenal.content;
 
-import arsenal.GlobalVar;
+import arsenal.ArsenalVar;
 import arsenal.content.grid.GridPartData;
 import arc.Core;
 import arc.graphics.g2d.Draw;
@@ -20,14 +20,14 @@ import arc.struct.ObjectMap;
 import arc.struct.Seq;
 import arc.util.Tmp;
 import mindustry.graphics.Pal;
+
 import static mindustry.Vars.player;
 
 public class CustomUnitCanvas extends WidgetGroup{
     public static int bounds = 100;
     public float unitSize = 40;
     public CustomUnitTileCanvas tilemap;
-    public Seq<Point2> TileGrid = GlobalVar.unitGrids.get(0);
-    //public Seq<Point2> placedTiles = new Seq<>();
+    public Seq<Point2> tileGrid;
     public ObjectMap<GridPartData, Seq<Point2>> placedTiles = new ObjectMap<>();
 
     public Seq<GridPartData> GridPartSeq = new Seq<>();
@@ -77,13 +77,13 @@ public class CustomUnitCanvas extends WidgetGroup{
 
         });
 
-
+        //tileGrid = GridUtil.getUnitRect(UnitTypes.alpha, GRID_LEN);
     }
 
     public boolean canCreateTile(int x, int y, int width, int height){
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
-                if (!TileGrid.contains(new Point2(x+i, y+j)))return false;
+                if (!tileGrid.contains(new Point2(x+i, y+j)))return false;
                 for (var gridPoints: placedTiles.values()){
                     if (gridPoints.contains(new Point2(x+i, y+j)))return false;
                 }
@@ -136,7 +136,7 @@ public class CustomUnitCanvas extends WidgetGroup{
                 region.width * unitSize/16, region.height * unitSize/16);
 
             //Draw Tile Grids
-            for (Point2 point: TileGrid){
+            for (Point2 point: tileGrid){
                 if (point.x > 0 && point.y > 0){
                     Draw.color(Pal.accent, 0.3f);
                     drawGridRect(point.x, point.y);
@@ -208,7 +208,7 @@ public class CustomUnitCanvas extends WidgetGroup{
         public void drawGridOutline(int x, int y){
             Draw.alpha(0.5f);
             Draw.rect(
-                GlobalVar.gridOutline,
+                ArsenalVar.gridOutline,
                 this.x + x * unitSize + unitSize/2,
                 this.y + y * unitSize + unitSize/2,
                 unitSize,

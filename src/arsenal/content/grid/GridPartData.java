@@ -4,7 +4,7 @@ import arsenal.content.weapon.WeaponData;
 import arc.graphics.g2d.TextureRegion;
 import mindustry.gen.Unit;
 
-import static arsenal.GlobalVar.GRID_LEN;
+import static arsenal.ArsenalVar.GRID_LEN;
 
 public class GridPartData {
     public int width;

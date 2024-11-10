@@ -3,7 +3,6 @@ package arsenal.content.weapon;
 import arc.struct.Seq;
 import mindustry.type.UnitType;
 import mindustry.type.weapons.RepairBeamWeapon;
-import prototypes.customUnit.weapon.WeaponData;
 
 import static mindustry.Vars.content;
 
@@ -37,6 +36,5 @@ public class WeaponList {
                 weapons.add(weapon1);
             }
         }
-        //Log.info("FF: Ability List Size: " + weapons.size);
     }
 }
