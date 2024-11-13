@@ -77,7 +77,7 @@ public class CustomUnitCanvas extends WidgetGroup{
 
         });
 
-        //tileGrid = GridUtil.getUnitRect(UnitTypes.alpha, GRID_LEN);
+        //tileGrid = GridUtil.getUnitGrid(UnitTypes.alpha, GRID_LEN);
     }
 
     public boolean canCreateTile(int x, int y, int width, int height){

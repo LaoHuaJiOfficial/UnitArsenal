@@ -5,15 +5,14 @@ import arc.graphics.Pixmap;
 import arc.graphics.g2d.TextureRegion;
 import arc.math.Mathf;
 import arc.math.geom.Point2;
-import arc.struct.BoolSeq;
 import arc.struct.IntSeq;
-import arc.struct.Seq;
-import arc.util.Log;
-import arc.util.Tmp;
+import arsenal.content.grid.GridData;
 import arsenal.content.grid.UnitGridData;
+import arsenal.content.grid.WeaponGridData;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.UnitType;
+import mindustry.type.Weapon;
 
 import static arsenal.ArsenalVar.GRID_LEN;
 
@@ -28,8 +27,18 @@ public class GridUtil {
         unit.mounts = weaponTemp;
     }
 
-    public static UnitGridData getUnitRect(UnitType unit){
+    public static UnitGridData getUnitGrid(UnitType unit){
         TextureRegion region = unit.fullIcon;
+        return new UnitGridData(unit, getGridData(region));
+    }
+
+    public static WeaponGridData getWeaponGrid(Weapon weapon){
+        TextureRegion region = weapon.region;
+        return new WeaponGridData(weapon, getGridData(region));
+    }
+
+
+    public static GridData getGridData(TextureRegion region){
 
         int widthStep = Mathf.ceil((float) region.width / GRID_LEN);
         int heightStep = Mathf.ceil((float) region.height / GRID_LEN);
@@ -57,11 +66,11 @@ public class GridUtil {
                     if ((pixel & 0x000000ff) == 0) sampleCount++;
                 }
 
-                if (sampleCount > 2){tmpPoints.set(y * widthStep + x, 0);}else {tmpPoints.set(y * widthStep + x, 2);}
+                if (sampleCount > 2){tmpPoints.set(y * widthStep + x, 0);}else {tmpPoints.set(y * widthStep + x, 1);}
             }
         }
         pixmap.dispose();
 
-        return new UnitGridData(unit, tmpPoints, widthStep, heightStep, padLeft, padBot);
+        return new GridData(tmpPoints, widthStep, heightStep, padLeft, padBot);
     }
 }

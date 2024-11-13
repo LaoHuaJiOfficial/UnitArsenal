@@ -1,33 +1,20 @@
 package arsenal.content.grid;
 
-import arc.math.geom.Point2;
 import arc.struct.IntSeq;
-import arc.struct.Seq;
 import arc.util.Log;
 import mindustry.type.UnitType;
 
-public class UnitGridData {
+public class UnitGridData extends GridData{
     public UnitType unit;
-    public IntSeq grids;
-    public Seq<Point2> weaponGrids;
-    public Seq<Point2> armorGrids;
-    public Seq<Point2> powerGrids;
-    public Seq<Point2> engineGrids;
-    //draw coord shift for units.
-    public float xShift, yShift;
-    public int width, height;
 
     public UnitGridData(UnitType unit, IntSeq grids, int width, int height, float xShift, float yShift){
+        super(grids, width, height, xShift, yShift);
         this.unit = unit;
-        this.grids = grids;
+    }
 
-        this.width = width;
-        this.height = height;
-
-        this.xShift = xShift;
-        this.yShift = yShift;
-
-        forceSetMirror();
+    public UnitGridData(UnitType unit, GridData gridData){
+        super(gridData.grids, gridData.width, gridData.height, gridData.xShift, gridData.yShift);
+        this.unit = unit;
     }
 
     public void debugConsoleOutput(){
