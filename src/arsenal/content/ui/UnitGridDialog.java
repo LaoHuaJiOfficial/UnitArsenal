@@ -7,15 +7,12 @@ import arc.scene.ui.layout.Table;
 import arsenal.content.grid.WeaponGridData;
 import mindustry.Vars;
 import mindustry.content.Blocks;
-import mindustry.content.UnitTypes;
 import mindustry.core.Version;
 import mindustry.gen.Iconc;
-import mindustry.gen.Tex;
 import mindustry.graphics.Pal;
 import mindustry.mod.Mods;
 import mindustry.type.Category;
 import mindustry.type.UnitType;
-import mindustry.type.Weapon;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.world.Block;
@@ -74,11 +71,11 @@ public class UnitGridDialog extends BaseDialog {
 
             Button reset = new Button();
             reset.table(b -> b.label(() -> Iconc.redo + " Reset")).size(196f, 32f).pad(2);
-            reset.clicked(this::hide);
+            reset.clicked(unitGrid::reset);
 
             Button apply = new Button();
             apply.table(b -> b.label(() -> Iconc.units + " Apply")).size(196f, 32f).pad(2);
-            apply.clicked(this::hide);
+            apply.clicked(unitGrid::apply);
 
             cont.add(exit).pad(4).row();
             cont.add(reset).pad(4).row();
@@ -148,7 +145,8 @@ public class UnitGridDialog extends BaseDialog {
 
     @Override
     public Dialog show() {
-        unitGrid.current = unitGridsMap.get(player.unit().type() .name);
+        unitGrid.currentUnit = unitGridsMap.get(player.unit().type() .name);
+        unitGrid.reset();
         return super.show();
     }
 
@@ -203,6 +201,7 @@ public class UnitGridDialog extends BaseDialog {
                     t.image(weapon.weapon.region).size(64, 64);
                     t.label(() -> weapon.weapon.name + "\n Grid Size: " + weapon.width + "*" + weapon.height);
                 }).size(320, 0).expandX().fillX();
+                weaponButton.clicked(() -> currentSelectedWeapon = weapon);
 
                 weaponSelection.add(weaponButton).row();
                 weaponSelected.add(weaponButton);

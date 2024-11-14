@@ -18,7 +18,7 @@ import static arsenal.ArsenalVar.GRID_LEN;
 
 public class GridUtil {
     //sample 4 pixel to check valid grid
-    public static final Point2[] samplingPixels = {new Point2(3, 3), new Point2(3, 12), new Point2(12, 12), new Point2(12, 3)};
+    public static final Point2[] samplingPixels = {new Point2(2, 2), new Point2(2, 9), new Point2(9, 9), new Point2(9, 2)};
 
     public static void AddUnitWeapons(Unit unit, WeaponMount weapon){
         WeaponMount[] weaponTemp = new WeaponMount[unit.mounts.length + 1];
@@ -66,7 +66,7 @@ public class GridUtil {
                     if ((pixel & 0x000000ff) == 0) sampleCount++;
                 }
 
-                if (sampleCount > 2){tmpPoints.set(y * widthStep + x, 0);}else {tmpPoints.set(y * widthStep + x, 1);}
+                if (sampleCount == 4){tmpPoints.set(y * widthStep + x, 0);}else {tmpPoints.set(y * widthStep + x, 1);}
             }
         }
         pixmap.dispose();

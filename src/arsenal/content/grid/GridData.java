@@ -1,9 +1,12 @@
 package arsenal.content.grid;
 
 import arc.struct.IntSeq;
+import arc.util.ArcRuntimeException;
+import arc.util.Strings;
 import mindustry.type.UnitType;
 
 public class GridData {
+    //start from left bottom and ends at top right
     public IntSeq grids;
     //draw coord shift for units.
     public float xShift, yShift;
@@ -17,5 +20,16 @@ public class GridData {
 
         this.xShift = xShift;
         this.yShift = yShift;
+    }
+
+    public int getGrid(int x, int y){
+        if (x < 0 || y < 0 || x >= width || y >= height) return 0;
+        return grids.get(y * width + x);
+    }
+
+    public int getGridBottomLeft(int x, int y){
+        if (x < 0 || y < 0 || x >= width || y >= height) return 0;
+        int ry = height - y - 1;
+        return grids.get(ry * width + x);
     }
 }

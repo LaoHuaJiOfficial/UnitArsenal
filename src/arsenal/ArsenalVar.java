@@ -2,16 +2,13 @@ package arsenal;
 
 import arc.Core;
 import arc.graphics.g2d.TextureRegion;
-import arc.math.geom.Point2;
 import arc.struct.ObjectMap;
 import arc.struct.Seq;
-import arsenal.content.CustomUnitDialog;
 import arsenal.content.grid.UnitGridData;
 import arsenal.content.grid.WeaponGridData;
 import arsenal.content.ui.Hud;
 import arsenal.content.ui.UnitGridDialog;
 import mindustry.Vars;
-import mindustry.ctype.Content;
 import mindustry.mod.Mods;
 import mindustry.type.UnitType;
 
@@ -19,7 +16,7 @@ import static arsenal.ArsenalMain.ModNameSprite;
 import static mindustry.Vars.mods;
 
 public class ArsenalVar {
-    public static final int GRID_LEN = 16;
+    public static final int GRID_LEN = 12;
     public static TextureRegion weaponNoSprite, gridOutline;
 
 
