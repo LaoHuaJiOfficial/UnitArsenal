@@ -282,10 +282,6 @@ public class UnitGridLayout extends WidgetGroup {
         drawGrid();
         drawSelect();
 
-        occupyWeapon.forEach(entry -> {
-
-        });
-
         for(var key: occupyWeapon.keys()){
             WeaponGridData value = occupyWeapon.get(key);
             int ox = key % currentUnit.width;
