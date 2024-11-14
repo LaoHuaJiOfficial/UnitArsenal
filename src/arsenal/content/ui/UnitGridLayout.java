@@ -18,9 +18,11 @@ import arc.scene.ui.layout.Scl;
 import arc.scene.ui.layout.Table;
 import arc.scene.ui.layout.WidgetGroup;
 import arc.struct.ObjectMap;
+import arc.struct.Seq;
 import arc.util.Log;
 import arc.util.Tmp;
 import arsenal.ArsenalVar;
+import arsenal.content.OccupiedGridData;
 import arsenal.content.grid.UnitGridData;
 import arsenal.content.grid.WeaponGridData;
 import arsenal.utils.GridUtil;
@@ -39,7 +41,7 @@ public class UnitGridLayout extends WidgetGroup {
     private final float baseSize = Scl.scl(5f);
 
     public UnitGridData currentUnit;
-    public ObjectMap<Integer, WeaponGridData> occupyWeapon;
+    public Seq<OccupiedGridData> occupyWeapon;
 
     public int mouseX, mouseY;
     float panX, panY, zoom = 1f, lastZoom = -1f;
@@ -52,7 +54,7 @@ public class UnitGridLayout extends WidgetGroup {
 
         //setSize(getPrefWidth(), getPrefHeight());
 
-        occupyWeapon = new ObjectMap<>();
+        occupyWeapon = new Seq<>();
 
         debug = new Table();
         debug.setFillParent(true);
@@ -141,7 +143,7 @@ public class UnitGridLayout extends WidgetGroup {
 
                     Log.info(weaponStartX + ":" + weaponStartY);
 
-                    occupyWeapon.put((weaponStartY * currentUnit.width + weaponStartX), weapon);
+                    occupyWeapon.add(new OccupiedGridData(weaponStartY * currentUnit.width + weaponStartX, weapon));
                 }
 
                 // In mobile, placing the query is done in a separate button.
@@ -168,20 +170,19 @@ public class UnitGridLayout extends WidgetGroup {
     public void apply(){
         player.unit().mounts = new WeaponMount[]{};
 
-        for(var key: occupyWeapon.keys()){
-            WeaponGridData value = occupyWeapon.get(key);
-            int ox = key % currentUnit.width;
-            int oy = key / currentUnit.width;
+        for(OccupiedGridData gridData: occupyWeapon){
+            int ox = gridData.pos % currentUnit.width;
+            int oy = gridData.pos / currentUnit.width;
 
             UnitGridData unit = currentUnit;
 
             float blX = - (float) (unit.width * GRID_LEN) / tilesize / 2;
             float blY = - (float) (unit.height * GRID_LEN) / tilesize / 2;
 
-            float weaponX = blX + (ox * GRID_LEN + (value.width * GRID_LEN / 2f)) / tilesize;
-            float weaponY = blY + (oy * GRID_LEN + (value.height * GRID_LEN / 2f)) / tilesize;
+            float weaponX = blX + (ox * GRID_LEN + (gridData.weaponGridData.width * GRID_LEN / 2f)) / tilesize;
+            float weaponY = blY + (oy * GRID_LEN + (gridData.weaponGridData.height * GRID_LEN / 2f)) / tilesize;
 
-            Weapon newWeapon = value.weapon.copy();
+            Weapon newWeapon = gridData.weaponGridData.weapon.copy();
             newWeapon.x = weaponX * 2;
             newWeapon.y = weaponY * 2;
             newWeapon.alternate = false;
@@ -224,14 +225,13 @@ public class UnitGridLayout extends WidgetGroup {
                     }
                     //check other attached grids. false if occupied
                     AtomicBoolean occupied = new AtomicBoolean(false);
-                    for(var key: occupyWeapon.keys()){
-                        WeaponGridData value = occupyWeapon.get(key);
-                        int ox = key % currentUnit.width;
-                        int oy = key / currentUnit.width;
+                    for(OccupiedGridData gridData: occupyWeapon){
+                        int ox = gridData.pos % currentUnit.width;
+                        int oy = gridData.pos / currentUnit.width;
 
                         int sx = ux - ox;
                         int sy = uy - oy;
-                        if (value.getGridBottomLeft(sx, sy) != 0){
+                        if (gridData.weaponGridData.getGridBottomLeft(sx, sy) != 0){
                             occupied.set(true);
                         }
                     }
@@ -282,11 +282,10 @@ public class UnitGridLayout extends WidgetGroup {
         drawGrid();
         drawSelect();
 
-        for(var key: occupyWeapon.keys()){
-            WeaponGridData value = occupyWeapon.get(key);
-            int ox = key % currentUnit.width;
-            int oy = key / currentUnit.width;
-            drawWeapon(ox, oy, value);
+        for(OccupiedGridData gridData: occupyWeapon){
+            int ox = gridData.pos % currentUnit.width;
+            int oy = gridData.pos / currentUnit.width;
+            drawWeapon(ox, oy, gridData.weaponGridData);
         }
 
 
