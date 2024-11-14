@@ -1,8 +1,8 @@
 package arsenal.content.grid;
 
+import arc.struct.Seq;
 import arsenal.content.weapon.WeaponData;
 import arsenal.content.weapon.WeaponList;
-import arc.struct.Seq;
 
 public class GridPartList {
     public static Seq<GridPartData> GridWeaponList;

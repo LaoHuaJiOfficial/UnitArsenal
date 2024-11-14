@@ -2,7 +2,10 @@ package arsenal.content.ui;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
-import arc.scene.ui.*;
+import arc.scene.ui.Button;
+import arc.scene.ui.ButtonGroup;
+import arc.scene.ui.Dialog;
+import arc.scene.ui.Label;
 import arc.scene.ui.layout.Table;
 import arsenal.content.grid.WeaponGridData;
 import mindustry.Vars;

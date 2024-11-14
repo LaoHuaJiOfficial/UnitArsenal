@@ -1,10 +1,10 @@
 package arsenal.content.weapon;
 
-import arsenal.ArsenalVar;
-import arsenal.utils.GridUtil;
 import arc.Core;
 import arc.graphics.g2d.TextureRegion;
 import arc.util.Nullable;
+import arsenal.ArsenalVar;
+import arsenal.utils.GridUtil;
 import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Unit;
 import mindustry.type.UnitType;

@@ -1,9 +1,6 @@
 package arsenal.content.grid;
 
 import arc.struct.IntSeq;
-import arc.util.ArcRuntimeException;
-import arc.util.Strings;
-import mindustry.type.UnitType;
 
 public class GridData {
     //start from left bottom and ends at top right

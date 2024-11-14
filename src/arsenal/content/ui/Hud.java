@@ -5,7 +5,6 @@ import arc.scene.ui.layout.Table;
 import arsenal.ArsenalVar;
 import mindustry.Vars;
 import mindustry.gen.Iconc;
-import mindustry.ui.Styles;
 
 public class Hud {
     public Button arsenalButton;

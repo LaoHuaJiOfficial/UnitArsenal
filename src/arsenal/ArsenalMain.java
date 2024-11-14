@@ -1,13 +1,13 @@
 package arsenal;
 
-import arc.*;
+import arc.Events;
 import arc.struct.Seq;
 import arc.util.Time;
 import arsenal.content.grid.WeaponGridData;
 import arsenal.utils.GridUtil;
 import mindustry.content.UnitTypes;
-import mindustry.game.EventType.*;
-import mindustry.mod.*;
+import mindustry.game.EventType.ClientLoadEvent;
+import mindustry.mod.Mod;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
 

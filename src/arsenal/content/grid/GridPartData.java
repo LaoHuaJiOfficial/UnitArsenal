@@ -1,7 +1,7 @@
 package arsenal.content.grid;
 
-import arsenal.content.weapon.WeaponData;
 import arc.graphics.g2d.TextureRegion;
+import arsenal.content.weapon.WeaponData;
 import mindustry.gen.Unit;
 
 import static arsenal.ArsenalVar.GRID_LEN;
