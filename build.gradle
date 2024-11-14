@@ -67,13 +67,13 @@ tasks.register('jarAndroid') {
         def d8 = isWindows ? "d8.bat" : "d8"
 
         //dex and desugar files - this requires d8 in your PATH
-        "$d8 $dependencies --min-api 14 --output UnitArsenalModAndroid.jar UnitArsenalModDesktop.jar"
+        "$d8 $dependencies --min-api 14 --output UnitArsenalAndroid.jar UnitArsenalDesktop.jar"
                 .execute(null, new File("$buildDir/libs")).waitForProcessOutput(System.out, System.err)
     }
 }
 
 jar{
-    archiveFileName = "UnitArsenalModDesktop.jar"
+    archiveFileName = "UnitArsenalDesktop.jar"
 
     from{
         configurations.runtimeClasspath.collect{ it.isDirectory() ? it : zipTree(it) }
@@ -92,11 +92,11 @@ jar{
 tasks.register('copyTo', Copy) {
     from jar
     into 'E:/Steam/steamapps/common/Mindustry/saves/mods'
-    rename { 'UnitArsenalModJar.jar' }
+    rename { 'UnitArsenalJar.jar' }
 
     from jar
     into appDataRoaming
-    rename { 'UnitArsenalModJar.jar' }
+    rename { 'UnitArsenalJar.jar' }
 }
 
 tasks.register('debugMobile', JavaExec) {
@@ -126,14 +126,14 @@ tasks.register('debugDesktop', JavaExec) {
 tasks.register('deploy', Jar) {
     dependsOn jarAndroid
     dependsOn jar
-    archiveFileName = "UnitArsenalMod.jar"
+    archiveFileName = "UnitArsenal.jar"
 
-    from { [zipTree("$buildDir/libs/UnitArsenalModDesktop.jar"), zipTree("$buildDir/libs/UnitArsenalModAndroid.jar")] }
+    from { [zipTree("$buildDir/libs/UnitArsenalDesktop.jar"), zipTree("$buildDir/libs/UnitArsenalAndroid.jar")] }
 
     doLast {
         delete {
-            delete "$buildDir/libs/UnitArsenalModDesktop.jar"
-            delete "$buildDir/libs/UnitArsenalModAndroid.jar"
+            delete "$buildDir/libs/UnitArsenalDesktop.jar"
+            delete "$buildDir/libs/UnitArsenalAndroid.jar"
         }
     }
 }
