@@ -10,7 +10,7 @@ description: "A mindustry mod which allow customize player's unit via using exis
 
 version: 1.01
 
-minGameVersion: 146
+minGameVersion: 147
 
 hidden: true
 

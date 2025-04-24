@@ -19,7 +19,7 @@ java{
 
 ext{
     //the build number that this mod is made for
-    mindustryVersion = 'v146'
+    mindustryVersion = 'v147.1'
     jabelVersion = "93fde537c7"
     //windows sucks
     isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
@@ -105,7 +105,7 @@ tasks.register('debugMobile', JavaExec) {
 
     main = "-jar"
     args = [
-            "E:/MindustryModDevLib/Mindustry7.0.jar",
+            "E:/project/MindustryModDevLib/Mindustry8.0.jar",
             "-debug",
             "-testMobile"
     ]
@@ -117,10 +117,9 @@ tasks.register('debugDesktop', JavaExec) {
 
     main = "-jar"
     args = [
-            "E:/MindustryModDevLib/Mindustry7.0.jar",
+            "E:/project/MindustryModDevLib/Mindustry8.0.jar",
             "-debug",
     ]
-
 }
 
 tasks.register('deploy', Jar) {

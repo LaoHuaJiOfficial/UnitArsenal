@@ -2,33 +2,25 @@ package arsenal;
 
 import arc.Core;
 import arc.graphics.g2d.TextureRegion;
-import arc.struct.ObjectMap;
 import arc.struct.Seq;
-import arsenal.content.grid.UnitGridData;
-import arsenal.content.grid.WeaponGridData;
-import arsenal.content.ui.Hud;
-import arsenal.content.ui.UnitGridDialog;
-import mindustry.Vars;
+import arsenal.content.Hud;
+import arsenal.content.UnitCustomDialog;
 import mindustry.mod.Mods;
-import mindustry.type.UnitType;
+import mindustry.type.Weapon;
+import mindustry.type.weapons.RepairBeamWeapon;
 
 import static arsenal.ArsenalMain.ModNameSprite;
+import static mindustry.Vars.content;
 import static mindustry.Vars.mods;
 
 public class ArsenalVar {
     public static final int GRID_LEN = 12;
     public static TextureRegion weaponNoSprite, gridOutline;
 
-
-    //key: unit inner name, value: unit grid
-    public static ObjectMap<String, UnitGridData> unitGridsMap;
-    //key: weapon inner name, value: weapon grid
-    public static ObjectMap<String, WeaponGridData> weaponGridsMap;
-    public static ObjectMap<UnitType, Seq<WeaponGridData>> unitWeaponGridMap;
-
     public static Seq<Mods.LoadedMod> loadedMod;
+    public static Seq<Seq<Weapon>> weapons;
 
-    public static UnitGridDialog unitGridDialog;
+    public static UnitCustomDialog unitGridDialog;
     public static Hud hud;
 
     public static void init(){
@@ -36,15 +28,14 @@ public class ArsenalVar {
         gridOutline = Core.atlas.find(ModNameSprite("grid-outline"));
 
         loadedMod = mods.list().select(mod -> mod.enabled() && !mod.meta.hidden);
+        weapons = new Seq<>();
 
-        unitGridsMap = new ObjectMap<>(Vars.content.units().size);
-        weaponGridsMap = new ObjectMap<>();
-        unitWeaponGridMap = new ObjectMap<>();
+        content.units().each(unit -> {
+            weapons.add(unit.weapons.select(w -> !(w instanceof RepairBeamWeapon)));
+        });
 
-        unitGridDialog = new UnitGridDialog();
+        unitGridDialog = new UnitCustomDialog();
         hud = new Hud();
         hud.init();
-
-        //customUnitDialog = new CustomUnitDialog();
     }
 }

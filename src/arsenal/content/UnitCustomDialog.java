@@ -1,4 +1,4 @@
-package arsenal.content.ui;
+package arsenal.content;
 
 import arc.graphics.Color;
 import arc.graphics.g2d.TextureRegion;
@@ -7,15 +7,20 @@ import arc.scene.ui.ButtonGroup;
 import arc.scene.ui.Dialog;
 import arc.scene.ui.Label;
 import arc.scene.ui.layout.Table;
-import arsenal.content.grid.WeaponGridData;
+import arc.struct.Seq;
+import arc.util.Log;
+import arc.util.Scaling;
 import mindustry.Vars;
 import mindustry.content.Blocks;
 import mindustry.core.Version;
+import mindustry.entities.units.WeaponMount;
 import mindustry.gen.Iconc;
 import mindustry.graphics.Pal;
 import mindustry.mod.Mods;
 import mindustry.type.Category;
 import mindustry.type.UnitType;
+import mindustry.type.Weapon;
+import mindustry.type.weapons.RepairBeamWeapon;
 import mindustry.ui.Styles;
 import mindustry.ui.dialogs.BaseDialog;
 import mindustry.world.Block;
@@ -24,19 +29,17 @@ import static arsenal.ArsenalVar.*;
 import static mindustry.Vars.content;
 import static mindustry.Vars.player;
 
-public class UnitGridDialog extends BaseDialog {
-    public UnitGridLayout unitGrid;
+public class UnitCustomDialog extends BaseDialog {
+    public UnitCustomLayout unitGrid;
 
-    public UnitType currentSelectedUnitType;
+    public UnitType currentUnitType;
+    public Weapon currentWeapon;
+    public boolean forceMirror;
 
+    public Table fullTable, unitSelection, weaponSelection, settingTable, gridEditTable, selectionTable;
     public ButtonGroup<Button> modSelected, unitSelected, weaponSelected;
 
-    public WeaponGridData currentSelectedWeapon;
-
-    public Table fullTable;
-    public Table unitSelection, weaponSelection;
-    public Table settingTable, gridEditTable, selectionTable;
-    public UnitGridDialog() {
+    public UnitCustomDialog() {
         super("Arsenal Panel");
         clear();
         margin(0f);
@@ -59,21 +62,30 @@ public class UnitGridDialog extends BaseDialog {
         weaponSelected.setMinCheckCount(0);
         weaponSelected.setMaxCheckCount(1);
 
-        unitGrid = new UnitGridLayout();
+        unitGrid = new UnitCustomLayout();
 
         unitSelection = new Table();
         weaponSelection = new Table();
 
         settingTable.background(Styles.black);
         settingTable.table(cont -> {
-            cont.label(() -> "SETTINGS HERE").row();
+            cont.label(() -> "SETTINGS").row();
 
             Button exit = new Button();
             exit.table(b -> b.label(() -> Iconc.exit + " Exit")).size(196f, 32f).pad(2);
             exit.clicked(this::hide);
 
+            Button mirror = new Button();
+            mirror.table(b -> b.label(() -> Iconc.flipX + " Mirror")).size(196f, 32f).pad(2);
+            mirror.clicked(() -> forceMirror = !forceMirror);
+            mirror.setChecked(forceMirror);
+
+            Button redo = new Button();
+            redo.table(b -> b.label(() -> Iconc.redo + " Redo")).size(196f, 32f).pad(2);
+            redo.clicked(unitGrid::redo);
+
             Button reset = new Button();
-            reset.table(b -> b.label(() -> Iconc.redo + " Reset")).size(196f, 32f).pad(2);
+            reset.table(b -> b.label(() -> Iconc.refresh + " Reset")).size(196f, 32f).pad(2);
             reset.clicked(unitGrid::reset);
 
             Button apply = new Button();
@@ -81,6 +93,8 @@ public class UnitGridDialog extends BaseDialog {
             apply.clicked(unitGrid::apply);
 
             cont.add(exit).pad(4).row();
+            cont.add(mirror).pad(4).row();
+            cont.add(redo).pad(4).row();
             cont.add(reset).pad(4).row();
             cont.add(apply).pad(4).row();
 
@@ -119,7 +133,7 @@ public class UnitGridDialog extends BaseDialog {
                     modButton.margin(8);
                     modButton.table(t -> {
                         t.image(modFirstIcon(mod)).size(32, 32);
-                        Label label = new Label(() -> mod.meta.displayName + " [white]: " + mod.meta.version);
+                        Label label = new Label(() -> mod.meta.internalName + " [white]: " + mod.meta.version);
                         label.setSize(280, 0);
                         t.add(label).left().maxWidth(280).expandX().fillX().pad(0, 12, 0, 12);
                     }).expandX().fillX();
@@ -148,7 +162,13 @@ public class UnitGridDialog extends BaseDialog {
 
     @Override
     public Dialog show() {
-        unitGrid.currentUnit = unitGridsMap.get(player.unit().type() .name);
+        unitGrid.playerUnitType = player.unit().type();
+        Seq<Weapon> weapons = new Seq<>();
+        for (WeaponMount mount: player.unit().mounts){
+            if (mount.weapon instanceof RepairBeamWeapon) continue;
+            weapons.add(mount.weapon);
+        }
+        unitGrid.playerWeapons = weapons;
         unitGrid.reset();
         return super.show();
     }
@@ -167,7 +187,7 @@ public class UnitGridDialog extends BaseDialog {
                 unitSelect.setSize(32, 32);
                 unitSelect.margin(4);
                 unitSelect.clicked(() -> {
-                    currentSelectedUnitType = unit;
+                    currentUnitType = unit;
                     rebuildWeaponSelection();
                 });
 
@@ -195,16 +215,16 @@ public class UnitGridDialog extends BaseDialog {
         weaponSelection.clear();
         weaponSelected.clear();
 
-        if (currentSelectedUnitType == null){
+        if (currentUnitType == null){
             weaponSelection.label(() -> "SELECT A UNIT...");
         }else {
-            for (WeaponGridData weapon: unitWeaponGridMap.get(currentSelectedUnitType)){
+            for (Weapon weapon: weapons.get(currentUnitType.id)){
                 Button weaponButton = new Button();
                 weaponButton.table(t -> {
-                    t.image(weapon.weapon.region).size(64, 64);
-                    t.label(() -> weapon.weapon.name + "\n Grid Size: " + weapon.width + "*" + weapon.height);
+                    t.image(weapon.region).size(64, 64).scaling(Scaling.fit);
+                    t.label(() -> weapon.name + "\nMirror: " + weapon.mirror).expandX();
                 }).size(320, 0).expandX().fillX();
-                weaponButton.clicked(() -> currentSelectedWeapon = weapon);
+                weaponButton.clicked(() -> currentWeapon = weapon);
 
                 weaponSelection.add(weaponButton).row();
                 weaponSelected.add(weaponButton);
