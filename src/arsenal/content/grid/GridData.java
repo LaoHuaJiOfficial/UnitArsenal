@@ -1,8 +1,11 @@
 package arsenal.content.grid;
 
+import arc.math.geom.Point2;
 import arc.struct.IntSeq;
 
 public class GridData {
+    public static final Point2[] samplingPixels = {new Point2(2, 2), new Point2(2, 9), new Point2(9, 9), new Point2(9, 2)};
+
     //start from left bottom and ends at top right
     public IntSeq grids;
     //draw coord shift for units.

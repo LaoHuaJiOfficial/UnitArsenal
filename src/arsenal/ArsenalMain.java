@@ -42,8 +42,6 @@ public class ArsenalMain extends Mod{
                 }
 
                 unitGridsMap.get(UnitTypes.omura.name).debugConsoleOutput();
-
-                //ArsenalVar.unitGridDialog.show();
             });
         });
     }
