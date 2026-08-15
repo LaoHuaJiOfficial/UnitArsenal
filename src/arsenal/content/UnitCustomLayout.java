@@ -115,12 +115,15 @@ public class UnitCustomLayout extends WidgetGroup {
     }
 
     public void apply(){
-        Seq<WeaponMount> mounts = new Seq<>();
-        for (Weapon weapon: playerWeapons) {
-            mounts.add(new WeaponMount(weapon));
-        }
-        player.unit().mounts = mounts.toArray(WeaponMount.class);
+    Seq<WeaponMount> mounts = new Seq<>();
+    for (Weapon weapon: playerWeapons) {
+        mounts.add(new WeaponMount(weapon));
     }
+    player.unit().mounts = mounts.toArray(WeaponMount.class);
+
+    // Lưu lại loadout để tự động khôi phục ở lần respawn sau.
+    ArsenalVar.saveLoadout(playerUnitType, playerWeapons);
+}
 
     public boolean shouldMirror(){
         if (unitGridDialog.currentWeapon == null) return false;
